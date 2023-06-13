@@ -1,0 +1,34 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: webhook-test
+webhooks:
+- admissionReviewVersions:
+  - v1
+  - v1beta1
+  clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJzekNDQVZxZ0F3SUJBZ0lRVE9YVmJLbEYrdnhFMFpUNUxxNEJyVEFLQmdncWhrak9QUVFEQWpBNk1SUXcKRWdZRFZRUUtFd3RVWlc1alpXNTBJRlJUUmpFaU1DQUdBMVVFQXhNWmRITm1MWEp2YjNRdWRHVnVZMlZ1ZEdOcwpiM1ZrTG1OdmJUQWVGdzB5TWpBek1qVXdOalF4TURaYUZ3MHpNakF6TWpJd05qUXhNRFphTURveEZEQVNCZ05WCkJBb1RDMVJsYm1ObGJuUWdWRk5HTVNJd0lBWURWUVFERXhsMGMyWXRjbTl2ZEM1MFpXNWpaVzUwWTJ4dmRXUXUKWTI5dE1Ga3dFd1lIS29aSXpqMENBUVlJS29aSXpqMERBUWNEUWdBRU9nYlJ1Z3FXb21lRGVmYlFiaDV6R1RRWgpOd1dRQjloOEdaQkp2ZXMyYmdpUWxSUnFsOXJlUVV4Q0NSSUt5aCtOV2cxZWg2Kzl2Y01pL1JRRjJISG1CNk5DCk1FQXdEZ1lEVlIwUEFRSC9CQVFEQWdLME1BOEdBMVVkRXdFQi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZPUzYKQW1VYStCU0IzQldzQk5jZzVyMlN0cFhvTUFvR0NDcUdTTTQ5QkFNQ0EwY0FNRVFDSUVFaFpLdmowVTQxanVWeAp1YzZkelNLenNlWnpCVitIZjk2SCtiRkxudk9FQWlCWUVqd1hhTlpuOVdGWVRqNSs2WDNJR0x5M2JpWk9Ja21kCk5YS3hrQ0xVNVE9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0t
+    service:
+      namespace: webhook-test
+      name: webhook-server
+      path: /webhook
+  objectSelector:
+    matchExpressions:
+    - key: test-webhook
+      operator: In
+      values:
+      - enable
+  name: webhook-test.foo.com
+  rules:
+  - apiGroups:
+    - apps
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    - DELETE
+    resources:
+    - deployments
+  sideEffects: None
+  timeoutSeconds: 15

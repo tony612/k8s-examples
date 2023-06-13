@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webhook-server
+  labels:
+    app: webhook-server
+spec:
+  selector:
+    matchLabels:
+      app: webhook-server
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: webhook-server
+    spec:
+      containers:
+      - name: app
+        image: webhook-server
+        imagePullPolicy: IfNotPresent
+        args:
+        - -cert=/data/certs/cert.pem
+        - -key=/data/certs/key.pem
+        volumeMounts:
+        - mountPath: /data/certs
+          name: cert
+          readOnly: true
+      volumes:
+      - name: cert
+        secret:
+          defaultMode: 0444
+          secretName: webhook-server-cert

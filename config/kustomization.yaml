@@ -1,0 +1,30 @@
+# Adds namespace to all resources.
+namespace: webhook-test
+
+resources:
+- ./ns.yaml
+- ./webhook-server.yaml
+- ./service.yaml
+- ./webhook.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+secretGenerator:
+- name: webhook-server-cert
+  files:
+  - cert.pem=cert.pem
+  - key.pem=key.pem
+
+replacements:
+- source:
+    kind: Secret
+    name: webhook-server-cert
+    version: v1
+    fieldPath: data.[cert.pem]
+  targets:
+  - select:
+      kind: MutatingWebhookConfiguration
+      name: webhook-test
+    fieldPaths:
+    - webhooks.0.clientConfig.caBundle
