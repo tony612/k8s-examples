@@ -21,6 +21,9 @@ spec:
         args:
         - -cert=/data/certs/cert.pem
         - -key=/data/certs/key.pem
+        # env:
+        # - name: NOT_ALLOWED
+        #   value: "true"
         volumeMounts:
         - mountPath: /data/certs
           name: cert

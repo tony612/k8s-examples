@@ -5,6 +5,7 @@ metadata:
   labels:
     app: test-app
     test-webhook: enable
+    version: v1
 spec:
   selector:
     matchLabels:
