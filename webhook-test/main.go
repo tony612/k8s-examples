@@ -68,6 +68,8 @@ func main() {
 
 	// One can use generate_cert.go in crypto/tls to generate cert.pem and key.pem.
 	log.Printf("listening at 8443")
-	err := http.ListenAndServeTLS(":8443", *certPath, *keyPath, nil)
+	server := &http.Server{Addr: ":8443", Handler: nil}
+	server.SetKeepAlivesEnabled(os.Getenv("DISABLE_KEEP_ALIVE") == "")
+	err := server.ListenAndServeTLS(*certPath, *keyPath)
 	log.Fatal(err)
 }
